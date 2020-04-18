@@ -74,6 +74,7 @@ github "jquery/jquery-ui" "jquery-ui"
 github "jquery/jquerymobile.com" "jquery-mobile"
 xml "https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions.xml" "/ZAP/core/version/text()" "OWASP ZAP"
 github "OWASP/Amass" "OWASP Amass"
+github "virustotal/yara" "YARA"
 atom "http://hg.nginx.org/nginx/atom-log" "nginx"
 tomcat 9
 linux
