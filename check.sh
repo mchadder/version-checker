@@ -77,6 +77,7 @@ github "OWASP/Amass" "OWASP Amass"
 github "virustotal/yara" "YARA"
 github "java-decompiler/jd-gui" "jd-gui"
 github "aircrack-ng/aircrack-ng" "aircrack-ng"
+github "openssl/openssl" "OpenSSL"
 atom "http://hg.nginx.org/nginx/atom-log" "nginx"
 tomcat 9
 linux
