@@ -96,6 +96,7 @@ function nginx() {
 function misc() {
   maintitle "MISC"
   sqlite
+  github "twbs/bootstrap" "Bootstrap"
   github "virustotal/yara" "YARA"
   github "java-decompiler/jd-gui" "jd-gui"
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
