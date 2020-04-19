@@ -103,6 +103,7 @@ function misc() {
   github "java-decompiler/jd-gui" "jd-gui"
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
   github "openssl/openssl" "OpenSSL"
+  github "curl/curl" "cURL"
 }
 
 oracle
