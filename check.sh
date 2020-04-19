@@ -74,11 +74,14 @@ function owasp() {
   github "jeremylong/DependencyCheck" "Dependency-Check"
 }
 
-function jquery() {
-  maintitle "JQUERY"
+function jsframeworks() {
+  maintitle "JS FRAMEWORKS"
   github "jquery/jquery" "jquery"
   github "jquery/jquery-ui" "jquery-ui"
   github "jquery/jquerymobile.com" "jquery-mobile"
+  github "twbs/bootstrap" "Bootstrap"
+  github "handlebars-lang/handlebars.js" "Handlebars"
+  github "requirejs/requirejs" "Require"
 }
 
 function apache() {
@@ -96,7 +99,6 @@ function nginx() {
 function misc() {
   maintitle "MISC"
   sqlite
-  github "twbs/bootstrap" "Bootstrap"
   github "virustotal/yara" "YARA"
   github "java-decompiler/jd-gui" "jd-gui"
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
@@ -106,7 +108,7 @@ function misc() {
 oracle
 nginx
 apache
-jquery
+jsframeworks
 owasp
 misc
 linux
