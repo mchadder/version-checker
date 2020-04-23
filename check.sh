@@ -93,7 +93,7 @@ function apache() {
 
 function nginx() {
   maintitle "NGINX"
-  atom "http://hg.nginx.org/nginx/atom-log" "nginx"
+  atom "http://hg.nginx.org/nginx/atom-tags" "nginx"
 }
 
 function misc() {
@@ -113,3 +113,6 @@ jsframeworks
 owasp
 misc
 linux
+
+read -n 1
+
