@@ -14,6 +14,20 @@ function xml() {
   curl -s "${1}" 2>&1 | xmllint --xpath "${2}" -
 }
 
+function rss() {
+  title "${2}"
+  curl -s "${1}" 2>&1 | \
+    xmllint --xpath "/rss/channel/item[1]/title/text()" 2>&1 -
+}
+
+function atom() {
+  title "${2}"
+  curl -s "${1}" 2>&1 | \
+      xmllint --xpath "//*[local-name()='feed']/*[local-name()='entry']/*[local-name()=\"title\"]" --xmlout - | \
+      tidy -q --show-warnings no -w 100000 | \
+	  xmllint --html --xpath "//title[1]/text()" - 
+}
+
 function linux() { 
   maintitle "Linux Kernel Releases"
   curl -s "https://www.kernel.org/feeds/kdist.xml" 2>&1 | xmllint --xpath "//item/title/text()" -
@@ -27,6 +41,17 @@ function html() {
   curl -s "${1}" 2>&1 | tidy -q --show-warnings no | xmllint --html --xpath "${2}" 2>&1 -  
 }
 
+function java() {
+  # 
+  # linux-x64.tar.gz
+  maintitle "JAVA"
+
+  title "Oracle Java 8"
+  curl -s "https://www.oracle.com/java/technologies/javase-jre8-downloads.html" 2>&1 | \
+    tidy -q --show-warnings no | \
+	xmllint --html --xpath "string(//a[contains(@href,\".zip\")]/text())" - 2>&1
+}
+
 function oracle() {
   maintitle "ORACLE"
   title "ORDS"
@@ -35,14 +60,8 @@ function oracle() {
 	xmllint --html --xpath "string(//a[contains(@data-file,\".zip\")]/@data-file)" - 2>&1 | \
 	grep -i ".zip" | \
 	rev | cut -d '/' -f 1 | rev
-}
 
-function atom() {
-  title "${2}"
-  curl -s "${1}" 2>&1 | \
-      xmllint --xpath "//*[local-name()='feed']/*[local-name()='entry']/*[local-name()=\"title\"]" --xmlout - | \
-      tidy -q --show-warnings no  -w 100000 | \
-	  xmllint --html --xpath "//title[1]/text()" - 
+  rss "https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/rss-otn-sec.xml" "CPU"
 }
 
 function github() {
@@ -82,6 +101,7 @@ function jsframeworks() {
   github "twbs/bootstrap" "Bootstrap"
   github "handlebars-lang/handlebars.js" "Handlebars"
   github "requirejs/requirejs" "Require"
+  github "select2/select2" "Select2"
 }
 
 function apache() {
@@ -94,6 +114,7 @@ function apache() {
 function nginx() {
   maintitle "NGINX"
   atom "http://hg.nginx.org/nginx/atom-tags" "nginx"
+  github "nginx/unit" "nginx unit"
 }
 
 function misc() {
@@ -104,6 +125,9 @@ function misc() {
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
   github "openssl/openssl" "OpenSSL"
   github "curl/curl" "cURL"
+  github "kivy/buildozer" "Buildozer"
+  github "kivy/kivy" "Kivy"
+  github "intel/Intel-Linux-Processor-Microcode-Data-Files" "Intel ucode"
 }
 
 oracle
