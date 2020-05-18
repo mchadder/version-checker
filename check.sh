@@ -120,6 +120,7 @@ function nginx() {
 function misc() {
   maintitle "MISC"
   sqlite
+  github "NationalSecurityAgency/ghidra" "NSA Ghidra"
   github "virustotal/yara" "YARA"
   github "java-decompiler/jd-gui" "jd-gui"
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
