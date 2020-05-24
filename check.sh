@@ -1,38 +1,45 @@
 #!/bin/bash
 
 # https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
-NOCOLOUR="\033[0m"
-LIGHTGREEN="\033[1;32m"
-YELLOW="\033[1;33m"
-RED="\033[0;31m"
+# https://stackoverflow.com/questions/4332478/read-the-current-text-color-in-a-xterm/4332530#4332530
+YELLOW=$(tput setaf 3)
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+BLUE=$(tput setaf 4)
+MAGENTA=$(tput setaf 5)
+NORMAL=$(tput sgr0)
 
 function title() {
   printf "%-20s: " "${1}"
 }
 
+function entry() {
+  # entry <title> <date> <version>
+  printf "%-25s: %-37s: %s" "${MAGENTA}${1}" "${YELLOW}${2}" "${GREEN}${3}"
+  echo -e "${NORMAL}"
+}
+
 function maintitle() {
   echo ""
   # use the -e flag for escapes
-  echo -e "${RED}**** ${1} ****${NOCOLOUR}"
+  echo -e "${RED}**** ${1} ****${NORMAL}"
 }
 
 function xml() {
   # $1 - URL
   # $2 - xpath
   # $3 - echo string
-  title "${3}"
-  curl -s "${1}" 2>&1 | xmllint --xpath "${2}" -
+  entry "${3}" "" $(curl -s "${1}" 2>&1 | xmllint --xpath "${2}" -)
 }
 
 rss_atom_extract() {
-  title "${1}"
   TITLE_XPATH="${3}"
   DATE_XPATH="${4}"
   OUTPUT=$(curl -s "${2}")
   DATE_OUTPUT=$(echo -n "${OUTPUT}" | xmllint --nocdata --xpath "${DATE_XPATH}" --xmlout -)
   TITLE_OUTPUT=$(echo -n "${OUTPUT}" | xmllint --nocdata --xpath "${TITLE_XPATH}" --xmlout -)
 
-  echo -e "${YELLOW}${DATE_OUTPUT}${NOCOLOUR} : ${LIGHTGREEN}${TITLE_OUTPUT}${NOCOLOUR}"
+  entry "${1}" "${DATE_OUTPUT}" "${TITLE_OUTPUT}"
 }
 
 function rss() {
@@ -58,29 +65,27 @@ function html() {
   # $1 - URL
   # $2 - xpath
   # $3 - echo string
-  title "${3}"
-  curl -s "${1}" 2>&1 | tidy -q --show-warnings no | xmllint --html --xpath "${2}" 2>&1 -  
+  entry "${3}" "" $(curl -s "${1}" 2>&1 | tidy -q --show-warnings no | xmllint --html --xpath "${2}" 2>&1 -)
 }
 
 function java() {
-  # 
   # linux-x64.tar.gz
   maintitle "JAVA"
 
   title "Oracle Java 8"
   curl -s "https://www.oracle.com/java/technologies/javase-jre8-downloads.html" 2>&1 | \
     tidy -q --show-warnings no | \
-	xmllint --html --xpath "string(//a[contains(@href,\".zip\")]/text())" - 2>&1
+    xmllint --html --xpath "string(//a[contains(@href,\".zip\")]/text())" - 2>&1
 }
 
 function oracle() {
   maintitle "ORACLE"
-  title "ORDS"
-  curl -s "https://www.oracle.com/database/technologies/appdev/rest-data-services-downloads.html" 2>&1 | \
+
+  entry "ORDS" "" $(curl -s "https://www.oracle.com/database/technologies/appdev/rest-data-services-downloads.html" 2>&1 | \
     tidy -q --show-warnings no | \
 	xmllint --html --xpath "string(//a[contains(@data-file,\".zip\")]/@data-file)" - 2>&1 | \
 	grep -i ".zip" | \
-	rev | cut -d '/' -f 1 | rev
+	rev | cut -d '/' -f 1 | rev)
 
   rss "https://www.oracle.com/ocom/groups/public/@otn/documents/webcontent/rss-otn-sec.xml" "CPU"
 }
@@ -92,19 +97,19 @@ function github() {
 }
 
 function sqlite() {
-  title "sqlite"
-  curl -s "https://www.sqlite.org/chronology.html" | \
+  OUTPUT=$(curl -s "https://www.sqlite.org/chronology.html")
+  entry "sqlite" "" $(echo -n ${OUTPUT} | \
     tidy -q --show-warnings no | \
 	xmllint --html -xpath "//tr/td/a[contains(@href,\"releaselog\")]" - | \
-	xmllint --html -xpath "//a[1]/text()" -
+	xmllint --html -xpath "//a[1]/text()" -)
 }
 
 function tomcat() {
-title "tomcat ${1}"
-curl -s "http://mirror.vorboss.net/apache/tomcat/tomcat-${1}/?C=M;O=D" 2>&1 | \
+  OUTPUT=$(curl -s "http://mirror.vorboss.net/apache/tomcat/tomcat-${1}/?C=M;O=D" 2>&1)
+  entry "tomcat ${1}" "" $(echo -n ${OUTPUT} | \
      tidy -q --show-warnings no | \
 	 xmllint --html --xpath "string(/html/body//a[starts-with(@href,\"v9.0\")][1]/@href)" - | \
-	 cut -d '/' -f 1
+	 cut -d '/' -f 1)
 }
 
 function pentest() {
@@ -161,4 +166,4 @@ pentest
 misc
 linux
 
-read -n 1
+TMP=$(read -n 1)
