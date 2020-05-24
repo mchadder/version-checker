@@ -1,9 +1,19 @@
+#!/bin/bash
+
+# https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+NOCOLOUR="\033[0m"
+LIGHTGREEN="\033[1;32m"
+YELLOW="\033[1;33m"
+RED="\033[0;31m"
+
 function title() {
   printf "%-20s: " "${1}"
 }
 
 function maintitle() {
-  echo "**** ${1} ****"
+  echo ""
+  # use the -e flag for escapes
+  echo -e "${RED}**** ${1} ****${NOCOLOUR}"
 }
 
 function xml() {
@@ -14,18 +24,29 @@ function xml() {
   curl -s "${1}" 2>&1 | xmllint --xpath "${2}" -
 }
 
+rss_atom_extract() {
+  title "${1}"
+  TITLE_XPATH="${3}"
+  DATE_XPATH="${4}"
+  OUTPUT=$(curl -s "${2}")
+  DATE_OUTPUT=$(echo -n "${OUTPUT}" | xmllint --nocdata --xpath "${DATE_XPATH}" --xmlout -)
+  TITLE_OUTPUT=$(echo -n "${OUTPUT}" | xmllint --nocdata --xpath "${TITLE_XPATH}" --xmlout -)
+
+  echo -e "${YELLOW}${DATE_OUTPUT}${NOCOLOUR} : ${LIGHTGREEN}${TITLE_OUTPUT}${NOCOLOUR}"
+}
+
 function rss() {
-  title "${2}"
-  curl -s "${1}" 2>&1 | \
-    xmllint --xpath "/rss/channel/item[1]/title/text()" 2>&1 -
+  TITLE_XPATH="/rss/channel/item[1]/title/text()"
+  DATE_XPATH="/rss/channel/item[1]/pubDate/text()"
+
+  rss_atom_extract "${2}" "${1}" "${TITLE_XPATH}" "${DATE_XPATH}"
 }
 
 function atom() {
-  title "${2}"
-  curl -s "${1}" 2>&1 | \
-      xmllint --xpath "//*[local-name()='feed']/*[local-name()='entry']/*[local-name()=\"title\"]" --xmlout - | \
-      tidy -q --show-warnings no -w 100000 | \
-	  xmllint --html --xpath "//title[1]/text()" - 
+  TITLE_XPATH="//*[local-name()='feed']/*[local-name()='entry'][1]/*[local-name()='title']/text()"
+  DATE_XPATH="//*[local-name()='feed']/*[local-name()='entry'][1]/*[local-name()='updated']/text()"
+  
+  rss_atom_extract "${2}" "${1}" "${TITLE_XPATH}" "${DATE_XPATH}"  
 }
 
 function linux() { 
@@ -86,11 +107,16 @@ curl -s "http://mirror.vorboss.net/apache/tomcat/tomcat-${1}/?C=M;O=D" 2>&1 | \
 	 cut -d '/' -f 1
 }
 
-function owasp() {
-  maintitle "OWASP"
-  xml "https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions.xml" "/ZAP/core/version/text()" "ZAP"
-  github "OWASP/Amass" "Amass"
+function pentest() {
+  maintitle "PENTESTING TOOLS"
+  xml "https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions.xml" "/ZAP/core/version/text()" "OWASP ZAP"
+  github "OWASP/Amass" "OWASP Amass"
   github "jeremylong/DependencyCheck" "Dependency-Check"
+  github "NationalSecurityAgency/ghidra" "NSA Ghidra"
+  github "virustotal/yara" "YARA"
+  github "java-decompiler/jd-gui" "jd-gui"
+  github "aircrack-ng/aircrack-ng" "aircrack-ng"
+  rss "https://portswigger.net/burp/releases/rss" "BURP Suite"  
 }
 
 function jsframeworks() {
@@ -120,10 +146,6 @@ function nginx() {
 function misc() {
   maintitle "MISC"
   sqlite
-  github "NationalSecurityAgency/ghidra" "NSA Ghidra"
-  github "virustotal/yara" "YARA"
-  github "java-decompiler/jd-gui" "jd-gui"
-  github "aircrack-ng/aircrack-ng" "aircrack-ng"
   github "openssl/openssl" "OpenSSL"
   github "curl/curl" "cURL"
   github "kivy/buildozer" "Buildozer"
@@ -135,9 +157,8 @@ oracle
 nginx
 apache
 jsframeworks
-owasp
+pentest
 misc
 linux
 
 read -n 1
-
