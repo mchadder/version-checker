@@ -126,6 +126,7 @@ function pentest() {
 
 function jsframeworks() {
   maintitle "JS FRAMEWORKS"
+  github "denoland/deno" "Deno"
   github "jquery/jquery" "jquery"
   github "jquery/jquery-ui" "jquery-ui"
   github "jquery/jquerymobile.com" "jquery-mobile"
