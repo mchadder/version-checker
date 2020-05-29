@@ -114,17 +114,21 @@ function tomcat() {
 
 function pentest() {
   maintitle "PENTESTING TOOLS"
-  xml "https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions.xml" "/ZAP/core/version/text()" "OWASP ZAP"
-  github "OWASP/Amass" "OWASP Amass"
   github "jeremylong/DependencyCheck" "Dependency-Check"
   github "NationalSecurityAgency/ghidra" "NSA Ghidra"
   github "virustotal/yara" "YARA"
   github "java-decompiler/jd-gui" "jd-gui"
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
-  rss "https://portswigger.net/burp/releases/rss" "BURP Suite"  
+  github "rapid7/metasploit-framework" "MetaSploit"
+  rss "https://portswigger.net/burp/releases/rss" "BURP Suite"
+
+  # OWASP tools
+  xml "https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions.xml" "/ZAP/core/version/text()" "OWASP ZAP"
+  github "OWASP/Amass" "OWASP Amass"
+  github "SpiderLabs/owasp-modsecurity-crs" "OWASP Core Rule Set"
 }
 
-function jsframeworks() {
+function js() {
   maintitle "JS FRAMEWORKS"
   github "denoland/deno" "Deno"
   github "jquery/jquery" "jquery"
@@ -149,20 +153,30 @@ function nginx() {
   github "nginx/unit" "nginx unit"
 }
 
+function python() {
+  maintitle "Python"
+  github "Legrandin/pycryptodome" "pycryptodome"
+  github "Demonware/jose" "jose"
+  github "jpadilla/pyjwt" "pyjwt"
+  github "kivy/buildozer" "Buildozer"
+  github "kivy/kivy" "Kivy"
+  github "psf/requests" "PSF requests"
+  github "psf/requests-html" "PSF Requests-HTML"
+}
+
 function misc() {
   maintitle "MISC"
   sqlite
   github "openssl/openssl" "OpenSSL"
-  github "curl/curl" "cURL"
-  github "kivy/buildozer" "Buildozer"
-  github "kivy/kivy" "Kivy"
+  github "curl/curl" "cURL"  
   github "intel/Intel-Linux-Processor-Microcode-Data-Files" "Intel ucode"
 }
 
 oracle
 nginx
 apache
-jsframeworks
+python
+js
 pentest
 misc
 linux
