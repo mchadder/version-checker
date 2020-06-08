@@ -119,7 +119,9 @@ function pentest() {
   github "virustotal/yara" "YARA"
   github "java-decompiler/jd-gui" "jd-gui"
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
+  github "sqlmapproject/sqlmap" "sqlmap"
   github "rapid7/metasploit-framework" "MetaSploit"
+  github "apache/jmeter" "Apache Jmeter"
   rss "https://portswigger.net/burp/releases/rss" "BURP Suite"
 
   # OWASP tools
@@ -140,19 +142,6 @@ function js() {
   github "select2/select2" "Select2"
 }
 
-function apache() {
-  maintitle "APACHE"
-  html "https://mirrors.ukfast.co.uk/sites/ftp.apache.org/jmeter/binaries/" "string(/html/body/pre/a[3]/@href)" "jmeter"
-  html "http://mirror.vorboss.net/apache/httpd/" "string(//a[contains(@href, \".tar.gz\")]/@href)" "httpd"
-  tomcat 9
-}
-
-function nginx() {
-  maintitle "NGINX"
-  atom "http://hg.nginx.org/nginx/atom-tags" "nginx"
-  github "nginx/unit" "nginx unit"
-}
-
 function python() {
   maintitle "Python"
   github "Legrandin/pycryptodome" "pycryptodome"
@@ -167,14 +156,23 @@ function python() {
 function misc() {
   maintitle "MISC"
   sqlite
-  github "openssl/openssl" "OpenSSL"
-  github "curl/curl" "cURL"  
+  github "openssl/openssl" "OpenSSL"  
   github "intel/Intel-Linux-Processor-Microcode-Data-Files" "Intel ucode"
+  github "RetroPie/RetroPie-Setup" "RetroPie"
+}
+
+function http() {
+  maintitle "HTTP"
+  github "allinurl/goaccess" "goaccess"
+  github "curl/curl" "curl"
+  html "http://mirror.vorboss.net/apache/httpd/" "string(//a[contains(@href, \".tar.gz\")]/@href)" "httpd"
+  tomcat 9
+  atom "http://hg.nginx.org/nginx/atom-tags" "nginx"
+  github "nginx/unit" "nginx unit"  
 }
 
 oracle
-nginx
-apache
+http
 python
 js
 pentest
