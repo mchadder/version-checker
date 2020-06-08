@@ -81,6 +81,9 @@ function java() {
 function oracle() {
   maintitle "ORACLE"
 
+  github "utPLSQL/utPLSQL-SQLDeveloper" "utPLSQL SQLDeveloper"
+  github "utPLSQL/utPLSQL" "utPLSQL"
+
   entry "ORDS" "" $(curl -s "https://www.oracle.com/database/technologies/appdev/rest-data-services-downloads.html" 2>&1 | \
     tidy -q --show-warnings no | \
 	xmllint --html --xpath "string(//a[contains(@data-file,\".zip\")]/@data-file)" - 2>&1 | \
