@@ -182,6 +182,7 @@ function misc() {
   github "openssl/openssl" "OpenSSL"  
   github "jenkinsci/jenkins" "Jenkins"
   github "swagger-api/swagger-editor" "Swagger Editor"
+  github "swagger-api/swagger-ui" "Swagger UI"
   github "Kong/kong" "Kong"
   github "intel/Intel-Linux-Processor-Microcode-Data-Files" "Intel ucode"
   github "RetroPie/RetroPie-Setup" "RetroPie"
