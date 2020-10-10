@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Syntax: ./check.sh OR ./check.sh LINUX
+
+SECTION="$1"
+
 # https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
 # https://stackoverflow.com/questions/4332478/read-the-current-text-color-in-a-xterm/4332530#4332530
 YELLOW=$(tput setaf 3)
@@ -15,7 +19,7 @@ function title() {
 
 function entry() {
   # entry <title> <date> <version>
-  printf "%-25s: %-37s: %s" "${MAGENTA}${1}" "${YELLOW}${2}" "${GREEN}${3}"
+  printf "%-27s: %-37s: %s" "${MAGENTA}${1}" "${YELLOW}${2}" "${GREEN}${3}"
   echo -e "${NORMAL}"
 }
 
@@ -111,26 +115,39 @@ function tomcat() {
   OUTPUT=$(curl -s "http://mirror.vorboss.net/apache/tomcat/tomcat-${1}/?C=M;O=D" 2>&1)
   entry "tomcat ${1}" "" $(echo -n ${OUTPUT} | \
      tidy -q --show-warnings no | \
-	 xmllint --html --xpath "string(/html/body//a[starts-with(@href,\"v9.0\")][1]/@href)" - | \
+	 xmllint --html --xpath "string(/html/body//a[starts-with(@href,\"v${1}\")][1]/@href)" - | \
 	 cut -d '/' -f 1)
 }
 
+function fuse() {
+  maintitle "FUSE FS"
+  github "cryfs/cryfs" "cryfs"
+  github "libfuse/sshfs" "sshfs"
+  github "rfjakob/gocryptfs" "gocryptfs"
+  github "thkala/fuseflt" "fuseflt"
+}
+
 function pentest() {
-  maintitle "PENTESTING TOOLS"
-  github "jeremylong/DependencyCheck" "Dependency-Check"
+  maintitle "PENTESTING"
   github "NationalSecurityAgency/ghidra" "NSA Ghidra"
   github "virustotal/yara" "YARA"
   github "java-decompiler/jd-gui" "jd-gui"
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
+  github "skylot/jadx" "jadx"
   github "sqlmapproject/sqlmap" "sqlmap"
   github "rapid7/metasploit-framework" "MetaSploit"
-  github "apache/jmeter" "Apache Jmeter"
+  github "apache/jmeter" "Apache Jmeter"  
+  github "cloudlinux/kcare-uchecker" "Uchecker"  
   rss "https://portswigger.net/burp/releases/rss" "BURP Suite"
 
   # OWASP tools
   xml "https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions.xml" "/ZAP/core/version/text()" "OWASP ZAP"
   github "OWASP/Amass" "OWASP Amass"
   github "SpiderLabs/owasp-modsecurity-crs" "OWASP Core Rule Set"
+  github "OWASP/ASVS" "OWASP ASVS"
+  github "OWASP/wstg" "OWASP WSTG"
+  github "jeremylong/DependencyCheck" "OWASP Dependency Check"
+  github "DependencyTrack/dependency-track" "OWASP Dependency Track"
 }
 
 function js() {
@@ -154,12 +171,18 @@ function python() {
   github "kivy/kivy" "Kivy"
   github "psf/requests" "PSF requests"
   github "psf/requests-html" "PSF Requests-HTML"
+  github "datastax/python-driver" "cassandra-driver"
+  github "pinterest/pymemcache" "pymemcache"
 }
 
 function misc() {
   maintitle "MISC"
   sqlite
+  github "pivpn/pivpn" "PiVPN"
   github "openssl/openssl" "OpenSSL"  
+  github "jenkinsci/jenkins" "Jenkins"
+  github "swagger-api/swagger-editor" "Swagger Editor"
+  github "Kong/kong" "Kong"
   github "intel/Intel-Linux-Processor-Microcode-Data-Files" "Intel ucode"
   github "RetroPie/RetroPie-Setup" "RetroPie"
 }
@@ -169,17 +192,49 @@ function http() {
   github "allinurl/goaccess" "goaccess"
   github "curl/curl" "curl"
   html "http://mirror.vorboss.net/apache/httpd/" "string(//a[contains(@href, \".tar.gz\")]/@href)" "httpd"
+  tomcat 8
   tomcat 9
+  tomcat 10
   atom "http://hg.nginx.org/nginx/atom-tags" "nginx"
   github "nginx/unit" "nginx unit"  
+  github "openresty/openresty" "openresty"
 }
 
-oracle
-http
-python
-js
-pentest
-misc
-linux
+case "$SECTION" in
+  ORACLE)
+    oracle
+    ;;
+  HTTP)
+    http
+    ;;
+  PYTHON)
+    python
+    ;;
+  PENTEST)
+    pentest
+    ;;
+  JS)
+    js
+    ;;
+  FUSE)
+    fuse 
+    ;;
+  MISC)
+    misc
+    ;;
+  LINUX)
+    linux
+    ;;
+  *)
+    oracle
+    http
+    python 
+    js
+    fuse
+    pentest
+    misc
+    linux
+    ;;
+esac
 
 TMP=$(read -n 1)
