@@ -19,7 +19,7 @@ function title() {
 
 function entry() {
   # entry <title> <date> <version>
-  printf "%-27s: %-37s: %s" "${MAGENTA}${1}" "${YELLOW}${2}" "${GREEN}${3}"
+  printf "%-27s: %-37s: %s" "${MAGENTA}${1}" "${YELLOW}${2}" "${GREEN}${3:0:60}"
   echo -e "${NORMAL}"
 }
 
@@ -87,6 +87,7 @@ function oracle() {
 
   github "utPLSQL/utPLSQL-SQLDeveloper" "utPLSQL SQLDeveloper"
   github "utPLSQL/utPLSQL" "utPLSQL"
+  github "Trivadis/plsql-unwrapper-sqldev" "PL/SQL Unwrapper"
 
   entry "ORDS" "" $(curl -s "https://www.oracle.com/database/technologies/appdev/rest-data-services-downloads.html" 2>&1 | \
     tidy -q --show-warnings no | \
@@ -131,14 +132,19 @@ function pentest() {
   maintitle "PENTESTING"
   github "NationalSecurityAgency/ghidra" "NSA Ghidra"
   github "virustotal/yara" "YARA"
+  github "OSUSecLab/InputScope" "InputScope"
   github "java-decompiler/jd-gui" "jd-gui"
   github "aircrack-ng/aircrack-ng" "aircrack-ng"
   github "skylot/jadx" "jadx"
   github "sqlmapproject/sqlmap" "sqlmap"
   github "rapid7/metasploit-framework" "MetaSploit"
   github "apache/jmeter" "Apache Jmeter"  
-  github "cloudlinux/kcare-uchecker" "Uchecker"  
+  github "cloudlinux/kcare-uchecker" "Uchecker"
+  github "insidersec/insider" "Insider"
   rss "https://portswigger.net/burp/releases/rss" "BURP Suite"
+
+  # IDS
+  github "snort3/snort3" "Snort 3"
 
   # OWASP tools
   xml "https://raw.githubusercontent.com/zaproxy/zap-admin/master/ZapVersions.xml" "/ZAP/core/version/text()" "OWASP ZAP"
@@ -160,6 +166,7 @@ function js() {
   github "handlebars-lang/handlebars.js" "Handlebars"
   github "requirejs/requirejs" "Require"
   github "select2/select2" "Select2"
+  github "jsplumb/jsPlumb" "jsplumb"
 }
 
 function python() {
